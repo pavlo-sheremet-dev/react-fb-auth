@@ -1,4 +1,9 @@
+import { UserMenu } from "../components/UserMenu";
+import { useAuth } from "../providers";
+
 const SignInPage = () => {
+  const { user, signInWithGoogle } = useAuth();
+
   return (
     <section>
       <div>
@@ -9,6 +14,12 @@ const SignInPage = () => {
           Necessitatibus, ad natus.
         </p>
       </div>
+      {!user && (
+        <button type="button" onClick={signInWithGoogle}>
+          Sign in
+        </button>
+      )}
+      <UserMenu />
     </section>
   );
 };

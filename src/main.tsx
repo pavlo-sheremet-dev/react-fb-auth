@@ -1,14 +1,14 @@
-import React, { lazy } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "./index.css";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { AuthProvider } from "./providers";
 
-const HomePage = lazy(() => import("./pages/HomePage"));
-const SignInPage = lazy(() => import("./pages/SignInPage"));
-const UserPage = lazy(() => import("./pages/UserPage"));
+import * as Pages from "./pages";
+import { PrivateRoute } from "./routes/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -17,15 +17,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: <Pages.HomePage />,
       },
       {
         path: "/sign-in",
-        element: <SignInPage />,
+        element: <Pages.SignInPage />,
       },
       {
         path: "/user",
-        element: <UserPage />,
+        element: (
+          <PrivateRoute>
+            <Pages.UserPage />
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -33,6 +37,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
